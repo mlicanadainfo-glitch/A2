@@ -336,6 +336,61 @@ body.present .slide-body{flex:1;}
 .gtab .zh,.rulebox .zh{margin-top:.1rem}
 @media(max-width:640px){.cols2{grid-template-columns:1fr}.gtab{font-size:.8rem}.gtab td,.gtab th{padding:.35rem .45rem}}
 </style>
+<style>
+/* ── TAILLE DE TEXTE AJUSTABLE (--z) + HIÉRARCHIE DES TITRES ── */
+:root{--z:1;--beige:#FFFFFF}
+body{background:var(--beige);}
+.nav-bar{background:var(--beige);border-bottom-color:#E4EDF3;max-width:1180px;}
+.slide-scale-wrap{max-width:1180px;}
+.slide-wrap{min-height:560px;}
+.hdr-title{max-width:none;font-size:1rem;}
+.hdr-num{font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#3AABDC;}
+.zoom-btn{border:1.5px solid #C0D0DC;background:#fff;border-radius:8px;padding:.15rem .55rem;font-family:inherit;font-weight:800;font-size:.8rem;color:#2A2D35;cursor:pointer;}
+.zoom-btn:hover{border-color:#3AABDC;color:#3AABDC;}
+.zoom-label{font-size:.75rem;min-width:42px;}
+.zoom-slider{width:110px;}
+/* couverture */
+.cover-slide{min-height:560px;}
+.cover-badge{font-size:calc(.9rem*var(--z));}
+.cover-icon{font-size:calc(4.2rem*var(--z));}
+.cover-title{font-size:calc(3.1rem*var(--z));font-weight:800;}
+.cover-sub{font-size:calc(1.3rem*var(--z));}
+.cover-plan-item{font-size:calc(1rem*var(--z));padding:.45rem 1.1rem;}
+/* séparateurs de partie */
+.section-div{min-height:440px;}
+.section-div-inner{max-width:760px;}
+.section-icon{font-size:calc(4.5rem*var(--z));font-weight:800;line-height:1;}
+.section-title{font-size:calc(2.8rem*var(--z));font-weight:800;line-height:1.2;}
+.section-sub{font-size:calc(1.35rem*var(--z));}
+.section-chip{font-size:calc(1rem*var(--z));padding:.35rem 1rem;}
+/* en-tête de diapo : titre bien visible */
+.slide-hdr{padding:calc(.9rem*var(--z)) 1.6rem;}
+.slide-hdr-left{gap:1rem;}
+.slide-dot{width:calc(42px*var(--z));height:calc(42px*var(--z));font-size:calc(1.1rem*var(--z));}
+.slide-lnum{font-size:calc(.85rem*var(--z));margin-bottom:.15rem;}
+.slide-title{font-size:calc(2rem*var(--z));font-weight:800;color:var(--acc);line-height:1.15;}
+.type-pill{font-size:calc(.85rem*var(--z));padding:.3rem .85rem;}
+/* corps */
+.slide-body{padding:calc(1.2rem*var(--z)) 1.8rem 1.8rem;}
+.sec-h3{font-size:calc(1.45rem*var(--z));color:var(--acc);margin:calc(1.2rem*var(--z)) 0 .55rem;padding-bottom:.35rem;}
+.body-p{font-size:calc(1.2rem*var(--z));}
+li{font-size:calc(1.2rem*var(--z));line-height:1.6;padding:.45rem 0 .45rem 1.7rem;}
+li::before{font-size:calc(1.4rem*var(--z));line-height:1.2;}
+.rulebox{font-size:calc(1.22rem*var(--z));line-height:1.65;padding:.8rem 1.1rem;}
+.tip{font-size:calc(1.1rem*var(--z));padding:.7rem 1rem;}
+.cols2{font-size:calc(1.18rem*var(--z));gap:.4rem 1.2rem;}
+.gtab{font-size:calc(1.18rem*var(--z));}
+.gtab th{font-size:calc(.95rem*var(--z));}
+.gtab td,.gtab th{padding:calc(.5rem*var(--z)) .8rem;}
+.gend{font-size:1em;}
+.q-item{padding:.7rem 1rem;}
+.q-text{font-size:calc(1.2rem*var(--z));}
+.q-bullet{font-size:calc(1.25rem*var(--z));min-width:calc(2.6rem*var(--z));}
+@media(max-width:600px){.slide-title{font-size:calc(1.5rem*var(--z));}.cover-title{font-size:calc(2rem*var(--z));}.section-title{font-size:calc(2rem*var(--z));}}
+/* plein écran : fond beige, pas de bleu foncé */
+body.present{background:var(--beige);}
+body.present .nav-bar{background:rgba(42,154,154,.88);}
+</style>
 </head>
 <body>
 <div class="app-header" style="border-bottom-color:#3AABDC">
@@ -344,7 +399,7 @@ body.present .slide-body{flex:1;}
     <div class="hdr-sep"></div>
     <div class="hdr-info"><span class="hdr-num">Grammaire</span><span class="hdr-title" style="margin-left:.55rem;padding-left:.6rem;border-left:1px solid #D0DDE8">Le nom et son entourage</span></div>
   </div>
-  <div class="hdr-zoom-wrap"><span class="zoom-label" id="zl">100%</span><input type="range" id="zr" min="60" max="220" value="100" step="5" class="zoom-slider"></div>
+  <div class="hdr-zoom-wrap"><button class="zoom-btn" id="zm-" title="Réduire (−)">A−</button><input type="range" id="zr" min="60" max="220" value="100" step="5" class="zoom-slider"><button class="zoom-btn" id="zm+" title="Agrandir (+)">A+</button><span class="zoom-label" id="zl">100%</span></div>
   <div class="hdr-right"><button class="fs-btn" id="fsb" onclick="toggleFS()" title="Plein écran (F)">⛶ <span class="fs-txt">Plein écran</span></button><span class="hdr-badge" style="background:#3AABDC">Grammaire · FR</span></div>
 </div>
 <div class="nav-bar">
@@ -402,13 +457,16 @@ const zr=document.getElementById('zr');
 const zl_el=document.getElementById('zl');
 const sw_el=document.getElementById('sw');
 function applyZoom(v){
+  v=Math.max(60,Math.min(220,v));zr.value=v;
   zl_el.textContent=v+'%';
-  const scale=v/100;
-  sw_el.style.transform='scale('+scale+')';
-  sw_el.style.width=Math.round(920*(1/scale))+'px';
-  sw_el.style.transformOrigin='top center';
+  document.documentElement.style.setProperty('--z',v/100);
+  if(!document.body.classList.contains('present')){sw_el.style.transform='';sw_el.style.width='';}
+  try{localStorage.setItem('mli_gram_noms_z',v)}catch(e){}
 }
 zr.addEventListener('input',()=>applyZoom(parseInt(zr.value)));
+document.getElementById('zm-').onclick=()=>applyZoom(parseInt(zr.value)-10);
+document.getElementById('zm+').onclick=()=>applyZoom(parseInt(zr.value)+10);
+try{const zz=parseInt(localStorage.getItem('mli_gram_noms_z'));if(zz)applyZoom(zz);}catch(e){}
 
 /* ══ MODE PRÉSENTATION + CLAVIER FRANÇAIS + COMPTEUR DE MOTS ══ */
 const SW=document.getElementById('sw'),SSW=document.getElementById('ssw'),DESIGN_W=1120;
